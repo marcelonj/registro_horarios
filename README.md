@@ -32,10 +32,12 @@ En esta versión incluirá usuarios y roles que tendrán distintos accesos a las
         - Puede marcar entrada y salida.
         - Puede ver su registro de horarios por meses así como sus horas extras y/o debidas.
         - Puede solicitar la modificación de algún registro.
+        - Cambiar la contraseña de inicio de sesión
     - Usuario administrador:
         - Puede ver los horarios de entrada y salida de cualquier empleado y las horas extras o debidas.
-        - Puede modificar los registros (incluir un panel con las peticiones de cambio).
+        - Puede modificar los registros.
         - Puede crear nuevos usuarios comunes.
+        - Resetear contraseña de inicio de sesión de distintos usuarios
 
 ## Tecnologías usadas
 
