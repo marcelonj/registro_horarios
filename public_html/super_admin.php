@@ -14,7 +14,7 @@ $consulta= "SELECT * FROM Usuarios INNER JOIN Empleados ON Usuarios.id_empleado=
 $respuesta= mysqli_query($conn, $consulta);
 
 function generar_option($fila){
-    $aux= "<option value=\"".$fila["id_empleado"]."\">".$fila["Nombre y apellido"]."</option>";
+    $aux= "<option value=\"".$fila["id_usuario"]."\">".$fila["Nombre y apellido"]."</option>";
     echo $aux;
 }
 

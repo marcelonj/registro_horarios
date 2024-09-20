@@ -38,6 +38,7 @@ if($respuesta= mysqli_query($conn, $consulta)){
     else{
         session_start();
         $_SESSION["id"]= $fila["id_empleado"];
+        $_SESSION["id_user"]= $fila["id_usuario"];
         $_SESSION["tipo"]= $fila["Tipo"];
         $consulta= "SELECT * FROM Empleados WHERE id_empleado=\"".$_SESSION["id"]."\"";
         $respuesta= mysqli_query($conn, $consulta);

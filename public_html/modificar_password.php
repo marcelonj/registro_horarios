@@ -9,7 +9,7 @@ require "conexion_db.php";
 
 if(isset($_POST["pass"])){
     $hash= password_hash($_POST["pass"], PASSWORD_DEFAULT);
-    $id= $_SESSION["id"];
+    $id= $_SESSION["id_user"];
 }
 else{
     $hash= password_hash("1234", PASSWORD_DEFAULT);

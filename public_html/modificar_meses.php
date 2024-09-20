@@ -118,8 +118,12 @@ require("conexion_db.php");
     $fecha1= "$anio-$mes-01";
     $fecha2= "$anio-$mes-$dias";
     
-    $consulta= "SELECT * FROM Horarios WHERE id_empleado=".$empleado." AND (Fecha BETWEEN \"".$fecha1."\" AND \"".$fecha2."\")";
-    $consulta2= "SELECT * FROM Empleados WHERE id_empleado=".$empleado;
+    $id_empleado = mysqli_query($conn, "SELECT id_empleado FROM Usuarios WHERE id_usuario=".$empleado);
+    $id_empleado = mysqli_fetch_assoc($id_empleado);
+    $id_empleado = $id_empleado["id_empleado"];
+    
+    $consulta= "SELECT * FROM Horarios WHERE id_empleado=".$id_empleado." AND (Fecha BETWEEN \"".$fecha1."\" AND \"".$fecha2."\")";
+    $consulta2= "SELECT * FROM Empleados WHERE id_empleado=".$id_empleado;
     $respuesta= mysqli_query($conn, $consulta);
     $respuesta2= mysqli_query($conn, $consulta2);
 

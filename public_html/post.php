@@ -19,10 +19,10 @@ $lat= $_POST["lat"];
 $empleado= $_SESSION["id"];
 
 function determinar_ubicacion($long_aux, $lat_aux){ //Determina si el usuario esta en el lugar indicado
-    $long_sup= -65.409172;
-    $lat_sup= -24.792140;
-    $long_inf= -65.411172;
-    $lat_inf= -24.794140;
+    $long_sup= -65.4058651;
+    $lat_sup= -24.7863406;
+    $long_inf= -65.4078651;
+    $lat_inf= -24.7883406;
 
     return $long_aux< $long_sup && $long_aux> $long_inf && $lat_aux< $lat_sup && $lat_aux> $lat_inf;
 }
