@@ -61,7 +61,7 @@ require("conexion_db.php");
         }
     }
 
-    function contar_horas($tiempo1, $tiempo2){
+    function contar_horas($tiempo1, $tiempo2, $extras){
         $horas1= $tiempo1["horas"];
         $minutos1= $tiempo1["minutos"];
         $horas2= $tiempo2["horas"];
@@ -124,6 +124,7 @@ require("conexion_db.php");
     
     $consulta= "SELECT * FROM Horarios WHERE id_empleado=".$id_empleado." AND (Fecha BETWEEN \"".$fecha1."\" AND \"".$fecha2."\")";
     $consulta2= "SELECT * FROM Empleados WHERE id_empleado=".$id_empleado;
+    $consulta_jornada= "SELECT * FROM Empleados e INNER JOIN Jornadas j on e.id_jornada = j.id_jornada WHERE id_empleado =";
     $respuesta= mysqli_query($conn, $consulta);
     $respuesta2= mysqli_query($conn, $consulta2);
 
@@ -176,7 +177,11 @@ require("conexion_db.php");
                     if($fila["Salida"]!= NULL){
                         $tiempo1= formar_array($fila["Entrada"]);
                         $tiempo2= formar_array($fila["Salida"]);
-                        $aux= contar_horas($tiempo1,$tiempo2);
+                        var_dump($fila);
+                        $query = $consulta_jornada.$fila["id_empleado"];
+                        $jornada = mysqli_query($conn, $query);
+                        var_dump(mysqli_fetch_assoc($jornada));
+                        $aux= contar_horas($tiempo1,$tiempo2,$fila["Horas_extra"]);
                         $horas["horas"]+= $aux["horas"];
                         $horas["minutos"]+= $aux["minutos"];
                         if($horas["minutos"]>=60){
