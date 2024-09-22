@@ -40,8 +40,6 @@ require("funciones.php");
     $fecha2= "$anio-$mes-$dias";
     
     $empleado = consultar_empleado($conn, $empleado);
-    
-    $consulta_jornada= "SELECT * FROM Empleados e INNER JOIN Jornadas j on e.id_jornada = j.id_jornada WHERE id_empleado =";
     $respuesta= consultar_horarios($empleado, $fecha1, $fecha2);
 
     $nombre_empleado= $empleado["Nombre y apellido"];

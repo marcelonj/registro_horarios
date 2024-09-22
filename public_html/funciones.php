@@ -117,13 +117,16 @@
             $salida= $fila["Salida"];
         }
         $horas= formatear_horas($horas);
+        $estilo = "";
+        if($fila["Horas_extra"]){ //Si es un horario con hs extra autorizada se cambia el estilo para mostrar su total
+            $estilo = 'style="color:white"';
+        }
         $aux= "<tr>
                     <td>".$fila["Fecha"]."</td>
                     <td>".$fila["Entrada"]."</td>
                     <td>".$salida."</td>
-                    <td>".$horas["horas"].":".$horas["minutos"]."</td>
-                </tr>
-        ";
+                    <td ".$estilo.">".$horas["horas"].":".$horas["minutos"]."</td>
+                </tr>";
         return $aux;
     }
 
