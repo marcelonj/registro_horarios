@@ -100,7 +100,7 @@ require("funciones.php");
                         $aux["horas"]= 0;
                         $aux["minutos"]= 0;
                     }
-                    echo genera_fila($fila, $aux);
+                    echo genera_fila($fila, $aux, $empleado);
                 }
         echo '</table>
         <br>';

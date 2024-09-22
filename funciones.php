@@ -11,33 +11,49 @@
         return $array_ind;
     }
 
-    function contar_horas($entrada, $salida, $turno_entrada, $turno_salida, $extras){
+    function determinar_entrada_salida($entrada, $salida, $turno_entrada, $turno_salida){
         /* 
-        Funcion que recibe dos arrays (uno con las horas de entrada y salida y otro con el turno que cumple el empleado) y un booleano (representa si se autorizaron horas extras) y devuelve un array con las horas y minutos que acumulo el empleado en el turno.
+        Funcion que recibe 4 strings que representan horas y determina cuales corresonden a la entrada y salida determinadas por la jornada laboral.
         */
         $entrada = formar_array($entrada);
         $salida = formar_array($salida);
         $turno_entrada = formar_array($turno_entrada);
         $turno_salida = formar_array($turno_salida);
+        $aux = array();
+        if ($entrada["horas"] < $turno_entrada["horas"]){
+            $entrada["horas"] = $turno_entrada["horas"];
+            $entrada["minutos"] = $turno_entrada["minutos"];
+        }
+        if ($entrada["horas"] == $turno_entrada["horas"] && $entrada["minutos"] < $turno_entrada["minutos"]){
+            $entrada["minutos"] = $turno_entrada["minutos"];
+        }
+        if ($salida["horas"] > $turno_salida["horas"]){
+            $salida["horas"] = $turno_salida["horas"];
+            $salida["minutos"] = $turno_salida["minutos"];
+        }
+        if ($salida["horas"] == $turno_salida["horas"] && $salida["minutos"] > $turno_salida["minutos"]){
+            $salida["minutos"] = $turno_salida["minutos"];
+        }
+        $aux["entrada"] = $entrada;
+        $aux["salida"] = $salida;
+        return $aux;
+    }
+
+    function contar_horas($entrada, $salida, $turno_entrada, $turno_salida, $extras){
+        /* 
+        Funcion que recibe dos arrays (uno con las horas de entrada y salida y otro con el turno que cumple el empleado) y un booleano (representa si se autorizaron horas extras) y devuelve un array con las horas y minutos que acumulo el empleado en el turno.
+        */
         $horas= 0;
         $minutos= 0;
-
-        if (!$extras){ //Si no se autorizaron horas extras se compueba que la entrada y salida no excedan la jornada
-            if ($entrada["horas"] < $turno_entrada["horas"]){
-                $entrada["horas"] = $turno_entrada["horas"];
-                $entrada["minutos"] = $turno_entrada["minutos"];
-            }
-            if ($entrada["horas"] == $turno_entrada["horas"] && $entrada["minutos"] < $turno_entrada["minutos"]){
-                $entrada["minutos"] = $turno_entrada["minutos"];
-            }
-            if ($salida["horas"] > $turno_salida["horas"]){
-                $salida["horas"] = $turno_salida["horas"];
-                $salida["minutos"] = $turno_salida["minutos"];
-            }
-            if ($salida["horas"] == $turno_salida["horas"] && $salida["minutos"] > $turno_salida["minutos"]){
-                $salida["minutos"] = $turno_salida["minutos"];
-            }
+        if ($extras){ 
+            $entrada = formar_array($entrada);
+            $salida = formar_array($salida);
         }
+        else{ //Si no se autorizaron horas extras se compueba que la entrada y salida no excedan la jornada
+                $aux = determinar_entrada_salida($entrada, $salida, $turno_entrada, $turno_salida);
+                $entrada = $aux["entrada"];
+                $salida = $aux["salida"];
+            }
 
         //Calculo de horas y minutos
         if($salida["minutos"] < $entrada["minutos"]){
@@ -135,22 +151,44 @@
         }
     }
 
-    function genera_fila($fila, $horas){
-        /* Funcion que genera una fila para la tabla con la entrada, la salida y el total de horas transcurridos */
+    function array_a_string($array){
+        if($array["horas"] < 10){
+            $array["horas"] = "0".$array["horas"];
+        }
+        if($array["minutos"] < 10){
+            $array["minutos"] = "0".$array["minutos"];
+        }
+        return $array["horas"].":".$array["minutos"].":00";
+    }
+
+    function genera_fila($fila, $horas, $empleado){
+        /* Funcion que recibe un registro de la base de datos horarios, un total de horas y los datos del empleado y genera una fila para la tabla con la entrada, la salida y el total de horas transcurridos */
         if(!$fila["Salida"]){
             $salida= "-";
+            $fila["salida"] = "23:59:00";
         }
         else{
             $salida= $fila["Salida"];
         }
         $horas= formatear_horas($horas);
-        $estilo = "";
-        if($fila["Horas_extra"]){ //Si es un horario con hs extra autorizada se cambia el estilo para mostrar su total
+        
+        if($fila["Horas_extra"]){ //Si no es un horario con hs extra autorizada se cambia el estilo para mostrar su total
             $estilo = 'style="color:white"';
+            $entrada = ($fila["Entrada"]);
+        }
+        else{
+            $estilo = "";
+            $aux = determinar_entrada_salida($fila["Entrada"], $fila["Salida"], $empleado["Entrada"], $empleado["Salida"]);
+            $entrada = array_a_string($aux["entrada"]);
+            $salida_aux = array_a_string($aux["salida"]);
+
+            if($salida != "-"){
+                $salida = $salida_aux;
+            }
         }
         $aux= "<tr>
                     <td>".$fila["Fecha"]."</td>
-                    <td>".$fila["Entrada"]."</td>
+                    <td>".$entrada."</td>
                     <td>".$salida."</td>
                     <td ".$estilo.">".$horas["horas"].":".$horas["minutos"]."</td>
                 </tr>";
