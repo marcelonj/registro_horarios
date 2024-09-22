@@ -54,7 +54,7 @@
 
     function viaje_tiempo($entrada, $salida){
         /* 
-        Funcion que comprueba que la salida no se produzca antes que la entrada.
+        Funcion que recibe dos fechas en formato string y comprueba que la salida no se produzca antes que la entrada.
         */
         $entrada = formar_array($entrada);
         $salida = formar_array($salida);
@@ -138,9 +138,52 @@
                     <td>".$fila["Fecha"]."</td>
                     <td>".$fila["Entrada"]."</td>
                     <td>".$salida."</td>
-                    <td><a href=\"modificar.php?id=".$fila["id_horario"]."\">Mod</a></td>
+                    <td><a href=\"modificar.php?id=".$fila["id_horario"]."\">🖋️</a></td>
                 </tr>
         ";
         return $aux;
+    }
+
+    function inyeccion_sql($str){
+        /* Funcion que comorueba los caracteres un string para evitar inyecciones sql. Devuelve True en caso de caracter sospechoso. */
+        $str = str_split($str);
+        foreach($str as $caracter){
+            if ($caracter == "'" || $caracter == "=" || $caracter == '"' || $caracter == "`" || $caracter == "<" || $caracter == ">"){
+                return True;
+            }
+        }
+        return False;
+    }
+    
+    function consultar_empleado($conn, $id){
+        /* 
+        Funcion que recibe una conexion mysqli y un id para devolver los datos de dicho id.
+        */
+        $consulta = "SELECT * FROM Empleados e INNER JOIN Jornadas j ON e.id_jornada=j.id_jornada WHERE id_empleado = ".$id;
+        $datos = mysqli_query($conn, $consulta);
+        $datos = mysqli_fetch_assoc($datos);
+        $datos["conn"] = $conn;
+        return $datos;
+    }
+
+    function consultar_usuario($empleado){
+        /* 
+        Funcion que recibe una conexion mysqli y un array de empleado para devolver los datos de dicho empleado.
+        */
+        $conn = $empleado["conn"];
+        $consulta = "SELECT * FROM Usuarios WHERE id_usuario = ".$empleado["id_empleado"];
+        $datos = mysqli_query($conn, $consulta);
+        $datos = mysqli_fetch_assoc($datos);
+        return $datos;
+    }
+
+    function consultar_horarios($empleado, $fecha1, $fecha2){
+        /* 
+        Funcion que recibe una conexion mysqli, un array de empleado y dos fechas para devolver los horarios de dicho empleado en el rango solicitado.
+        */
+        $conn = $empleado["conn"];
+        $consulta = "SELECT * FROM Horarios WHERE id_empleado = ".$empleado["id_empleado"]." AND (Fecha BETWEEN \"".$fecha1."\" AND \"".$fecha2."\") ORDER BY Fecha";
+        $datos = mysqli_query($conn, $consulta);
+        return $datos;
     }
 ?>

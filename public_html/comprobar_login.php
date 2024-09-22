@@ -1,9 +1,14 @@
 <?php
 require("conexion_db.php");
+require("funciones.php");
 
 //Declaracion de variables
 $usuario= $_POST["usuario"];
 $pass= $_POST["password"];
+if(inyeccion_sql($usuario) || inyeccion_sql($pass)){
+    echo "Por favor no introdusca caracteres especiales de tipo comillas o comparacion";
+    exit();
+}
 $consulta= "SELECT * FROM Usuarios WHERE Usuario=\"$usuario\""; //Se recupera la información del usuario
 
 
