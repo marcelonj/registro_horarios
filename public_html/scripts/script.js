@@ -65,3 +65,9 @@ function borrar_banner(){
 setTimeout(borrar_banner,1000);
 obtenerDatos();
 compruebaHora();
+
+if(localStorage.getItem("aviso_hs_extra")!="Aceptado"){
+    if(window.confirm("A partir del lunes 22/09/2024 no se contarán las horas extras que no hayan sido autorizadas.")){
+        localStorage.setItem("aviso_hs_extra", "Aceptado");
+    }
+}

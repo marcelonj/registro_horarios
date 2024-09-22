@@ -49,6 +49,11 @@
         $tiempo["horas"]= $horas;
         $tiempo["minutos"]= $minutos;
 
+        if($tiempo["horas"]<0 || $tiempo["minutos"]<0){ //Control para no tener jornadas negativas
+            $tiempo["horas"]= 0;
+            $tiempo["minutos"]= 0;
+        }
+
         return $tiempo;
     }
 
