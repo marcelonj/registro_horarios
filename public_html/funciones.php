@@ -108,6 +108,28 @@
         return $horas;
     }
 
+    function horas_extra($conn, $id){
+        /* 
+        Funcion que recibe una conexion y un id de registro horario para habilitar o deshabilitar las horas extra del mismo.
+        */
+        $consulta = "SELECT Horas_extra FROM Horarios where id_horario=".$id;
+        $resultado = mysqli_query($conn, $consulta);
+        if($resultado){
+            $horas_extra = mysqli_fetch_assoc($resultado)["Horas_extra"];
+            if($horas_extra == 0){
+                $horas_extra = "true";
+            }
+            else{
+                $horas_extra = "false";
+            }
+        }
+
+        $modificar = 'UPDATE Horarios SET Horas_extra='.$horas_extra.' WHERE id_horario='.$id;
+        if(mysqli_query($conn, $modificar)){
+            header("Location: index.php");
+        }
+    }
+
     function genera_fila($fila, $horas){
         /* Funcion que genera una fila para la tabla con la entrada, la salida y el total de horas transcurridos */
         if(!$fila["Salida"]){
@@ -137,11 +159,18 @@
         else{
             $salida= $fila["Salida"];
         }
+        if($fila["Horas_extra"]){
+            $estado = "Deshabilitar";
+        }
+        else{
+            $estado = "Habilitar";
+        }
         $aux= "<tr>
                     <td>".$fila["Fecha"]."</td>
                     <td>".$fila["Entrada"]."</td>
                     <td>".$salida."</td>
                     <td><a href=\"modificar.php?id=".$fila["id_horario"]."\">🖋️</a></td>
+                    <td><a href=\"horas_extra.php?id=".$fila["id_horario"]."\">".$estado."</a></td>
                 </tr>
         ";
         return $aux;

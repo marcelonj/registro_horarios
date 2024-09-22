@@ -85,6 +85,7 @@ require("funciones.php");
                     <th>Entrada</th>
                     <th>Salida</th>
                     <th>Modificar</th>
+                    <th>Hs extra</th>
                 </tr>';
                 while($fila= mysqli_fetch_assoc($respuesta)){
                     if($fila["Salida"]!= NULL){
