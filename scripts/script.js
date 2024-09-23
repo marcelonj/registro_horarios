@@ -1,3 +1,6 @@
+mWebView.getSettings().setJavaScriptEnabled(true);
+mWebView.setWebChromeClient(new WebChromeClient());
+
 const hora= document.getElementById("hora");
 const fecha= document.getElementById("fecha");
 const long= document.getElementById("long");
