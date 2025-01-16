@@ -33,7 +33,7 @@ require("funciones.php");
 
     $empleado= $_POST["empleado"];
     $mes= $_POST["mes"];
-    $anio= 2024;
+    $anio= 2025;
 
     $dias= dias_mes($mes, $anio);
     $fecha1= "$anio-$mes-01";
